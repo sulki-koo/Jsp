@@ -1,13 +1,11 @@
 package jspbasic.servlet;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
+import javax.activation.DataSource;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,6 +16,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -55,38 +54,43 @@ public class SendmailServlet extends HttpServlet {
 				}
 		});
 		
+		Part file =request.getPart("file");  
+		
+		String sender = request.getParameter("sender");
+		String receiver = request.getParameter("receiver");
+		String subject = request.getParameter("subject");
+		String content = request.getParameter("content");
+		
 try {
-			// 이메일 메시지 작성
 			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(sender));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver)); // 받는 사람 이메일
+			message.setSubject(subject);
 			
-			// 발신자 이메일
-			message.setFrom(new InternetAddress(request.getParameter("sender")));
+			MimeBodyPart textPart = new MimeBodyPart();  // MimeBodyPart는 이메일 본문이나 첨부 파일을 표현하는 객체
+			textPart.setText(content); // 이메일의 본문 내용(텍스트)을 설정
 			
-			// 수신자 이메일
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(request.getParameter("receiver"))); // 받는 사람 이메일
+			Multipart multipart = new MimeMultipart(); // 여러 개의 파트를 하나로 묶어서 이메일 메시지를 구성하는 객체
+			multipart.addBodyPart(textPart); // 본문을 multipart에 추가
 			
-			// 이메일 제목
-			message.setSubject(request.getParameter("subject"));
-			
-			// 첨부파일
-			Multipart multipart = new MimeMultipart();
-			
-			Part filePart = request.getPart("attachment"); // 업로드된 파일 part로 가져오기
-			if(filePart !=null) { // 첨부파일이 존재할 경우
-				MimeBodyPart attachmentPart = new MimeBodyPart(); 
-				InputStream fis = filePart.getInputStream(); // inputstream으로 가져오기
-					
-				String fileName = filePart.getSubmittedFileName(); // 파일이름 가져오기
-					
-				attachmentPart.setDataHandler(new DataHandler(new FileDataSource(filePart.getSubmittedFileName())));
-				attachmentPart.setFileName(fileName);
+			if(file !=null && file.getSize() >0) {
+				MimeBodyPart filePart = new MimeBodyPart();
 				
-				multipart.addBodyPart(attachmentPart);
+				InputStream fileContent = file.getInputStream(); // 첨부파일의 데이터가 담긴 InputStream
+				String fileName = file.getSubmittedFileName();
+				
+				// InputStream과 MIME 타입을 사용하여 첨부파일의 데이터를 DataSource 객체로 변환하는 클래스
+				// ByteArrayDataSource: 파일 데이터를 이메일에 포함할 수 있도록 DataSource 형태로 변환하는 클래스
+				// file.getContentType() : 첨부파일의 MIME 타입을 가져옴(ex. image/jpeg)
+				DataSource source = new ByteArrayDataSource(fileContent, file.getContentType());
+				
+				// DataHandler는 데이터를 처리하는 객체, DataSource를 설정하여, 첨부파일의 실제 데이터를 전달 시
+				// 그 데이터에 대한 메타 정보를 제공하여 클라이언트가 올바르게 해석 및 처리 할 수 있도록 함
+				filePart.setDataHandler(new DataHandler(source));
+				filePart.setFileName(fileName); // MimeBodyPart에 파일 이름을 설정
+				multipart.addBodyPart(filePart);
 			}
 			message.setContent(multipart);
-			
-			// 이메일 내용
-			message.setText(request.getParameter("content"));
 			
 			// 이메일 발송
 			Transport.send(message);
