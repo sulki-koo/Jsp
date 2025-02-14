@@ -16,7 +16,7 @@ public class ConnectionUtil {
 		try {
 			databaseProperties = new Properties();
 			databaseProperties.load(
-					new FileReader("D:/embededk/jee_workspace/JDBCBoard/src/main/webapp/WEB-INF/props/database.properties"));
+					new FileReader("C:/Users/Administrator/git/jdbcBoard/JDBCBoard/src/main/webapp/WEB-INF/props/database.properties"));
 			Class.forName(databaseProperties.getProperty("JDBC_DRIVER"));
 		} catch (Exception ex) {
 			ex.printStackTrace();

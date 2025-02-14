@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import jdbcboard.constant.ApplicationConstant;
 import jdbcboard.dao.MemberDAO;
 import jdbcboard.model.Member;
 import jdbcboard.util.ConnectionUtil;
@@ -22,8 +23,7 @@ public class MemberDAOImpl implements MemberDAO {
 	public MemberDAOImpl() {
 		try {
 			sqlProperties = new Properties();
-			sqlProperties.load(
-					new FileReader("D:/embededk/jee_workspace/JDBCBoard/src/main/webapp/WEB-INF/props/sql.properties"));
+			sqlProperties.load(new FileReader(ApplicationConstant.SQL_PROPERTIES));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -31,14 +31,13 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public List<Member> selectMember() {
-		List<Member> list = null;
 		try {
 			conn = ConnectionUtil.getConnectionUtil().getConnection();
 			pstmt = conn.prepareStatement(sqlProperties.getProperty("SELECT_MEMBER"));
 			rs = pstmt.executeQuery();
 
+			List<Member> MemberList = new ArrayList<Member>();
 			if (rs != null) {
-				list = new ArrayList<Member>();
 				while (rs.next()) {
 					Member member = new Member();
 					member.setMid(rs.getString("mid"));
@@ -48,10 +47,10 @@ public class MemberDAOImpl implements MemberDAO {
 					member.setMemail(rs.getString("memail"));
 					member.setMcp(rs.getString("mcp"));
 					member.setMdelyn(rs.getString("mdelyn"));
-					list.add(member);
+					MemberList.add(member);
 				}
 			}
-			return list;
+			return MemberList;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;

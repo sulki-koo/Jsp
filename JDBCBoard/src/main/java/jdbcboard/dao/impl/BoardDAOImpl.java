@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import jdbcboard.constant.ApplicationConstant;
 import jdbcboard.dao.BoardDAO;
 import jdbcboard.model.Board;
-import jdbcboard.model.Member;
 import jdbcboard.util.ConnectionUtil;
 
 public class BoardDAOImpl implements BoardDAO {
@@ -23,8 +23,7 @@ public class BoardDAOImpl implements BoardDAO {
 	public BoardDAOImpl() {
 		try {
 			sqlProperties = new Properties();
-			sqlProperties.load(
-					new FileReader("D:/embededk/jee_workspace/JDBCBoard/src/main/webapp/WEB-INF/props/sql.properties"));
+			sqlProperties.load(new FileReader(ApplicationConstant.SQL_PROPERTIES));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -32,23 +31,22 @@ public class BoardDAOImpl implements BoardDAO {
 
 	@Override
 	public List<Board> selectBoard() {
-		List<Board> list = null;
+
 		try {
 			conn = ConnectionUtil.getConnectionUtil().getConnection();
 			pstmt = conn.prepareStatement(sqlProperties.getProperty("SELECT_BOARD"));
 			rs = pstmt.executeQuery();
-
+			List<Board> boardList = new ArrayList<Board>();
 			if (rs != null) {
-				list = new ArrayList<Board>();
 				while (rs.next()) {
 					Board board = new Board();
 					board.setBid(rs.getInt("bid"));
 					board.setBname(rs.getString("bname"));
 					board.setBacnt(rs.getInt("bacnt"));
-					list.add(board);
+					boardList.add(board);
 				}
 			}
-			return list;
+			return boardList;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			return null;
@@ -68,9 +66,10 @@ public class BoardDAOImpl implements BoardDAO {
 			pstmt = conn.prepareStatement(sqlProperties.getProperty("GET_BOARD"));
 			pstmt.setInt(1, bid);
 			rs = pstmt.executeQuery();
+			Board board = null;
 
 			if (rs != null && rs.next()) {
-				Board board = new Board();
+				board = new Board();
 				board.setBid(rs.getInt("bid"));
 				board.setBname(rs.getString("bname"));
 				board.setBacnt(rs.getInt("bacnt"));
