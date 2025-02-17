@@ -8,10 +8,15 @@ import jdbcboard.service.MemberService;
 
 public class MemberServiecImpl implements MemberService {
 	
-	private MemberDAOImpl memberDAOImpl;
+	private static MemberServiecImpl memberServiceImpl = new MemberServiecImpl();
+	private static MemberDAOImpl memberDAOImpl;
 	
-	public MemberServiecImpl() {
-		memberDAOImpl = new MemberDAOImpl();
+	private MemberServiecImpl() {
+		memberDAOImpl = MemberDAOImpl.getMemberDAOImpl();
+	}
+	
+	public static MemberServiecImpl getMemberServiecImpl() {
+		return memberServiceImpl;
 	}
 
 	@Override

@@ -8,10 +8,15 @@ import jdbcboard.service.ArticleService;
 
 public class ArticleServiceImpl implements ArticleService {
 	
-	private ArticleDAOImpl articleDAOImpl;
+	private static ArticleServiceImpl articleServiceImpl = new ArticleServiceImpl();
+	private static ArticleDAOImpl articleDAOImpl;
 	
-	public ArticleServiceImpl() {
-		articleDAOImpl = new ArticleDAOImpl();
+	private ArticleServiceImpl() {
+		articleDAOImpl = ArticleDAOImpl.getarticleDAOImpl();
+	}
+	
+	public static ArticleServiceImpl getArticleServiceImpl() {
+		return articleServiceImpl;
 	}
 
 	@Override

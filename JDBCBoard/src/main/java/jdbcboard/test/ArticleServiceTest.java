@@ -10,7 +10,7 @@ public class ArticleServiceTest {
 
 	public static void main(String[] args) {
 
-		ArticleService articleService = new ArticleServiceImpl();
+		ArticleService articleService = ArticleServiceImpl.getArticleServiceImpl();
 
 		// insert
 //		Article article= new Article(0, "2번 제목", "2번 내용", 0, null, "N", 0, 0, 4, "hong3");

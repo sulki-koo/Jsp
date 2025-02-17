@@ -8,10 +8,15 @@ import jdbcboard.service.ReplyService;
 
 public class ReplyServiceImpl implements ReplyService {
 	
-	private ReplyDAOImpl replyDAOImpl;
+	private static ReplyServiceImpl replyServiceImpl = new ReplyServiceImpl();
+	private static ReplyDAOImpl replyDAOImpl;
 
-	public ReplyServiceImpl() {
-		replyDAOImpl = new ReplyDAOImpl();
+	private ReplyServiceImpl() {
+		replyDAOImpl = ReplyDAOImpl.getReplyDAOImpl();
+	}
+	
+	public static ReplyServiceImpl getReplyServiceImpl() {
+		return replyServiceImpl;
 	}
 	
 	@Override

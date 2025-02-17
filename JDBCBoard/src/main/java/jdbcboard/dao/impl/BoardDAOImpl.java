@@ -19,14 +19,20 @@ public class BoardDAOImpl implements BoardDAO {
 	Properties sqlProperties = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
+	
+	private static BoardDAOImpl boardDAOImpl = new BoardDAOImpl();
 
-	public BoardDAOImpl() {
+	private BoardDAOImpl() {
 		try {
 			sqlProperties = new Properties();
 			sqlProperties.load(new FileReader(ApplicationConstant.SQL_PROPERTIES));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public static BoardDAOImpl getBoardDAOImpl() {
+		return boardDAOImpl;
 	}
 
 	@Override
@@ -116,8 +122,7 @@ public class BoardDAOImpl implements BoardDAO {
 			conn = ConnectionUtil.getConnectionUtil().getConnection();
 			pstmt = conn.prepareStatement(sqlProperties.getProperty("UPDATE_BOARD"));
 			pstmt.setString(1, board.getBname());
-			pstmt.setInt(2, board.getBacnt());
-			pstmt.setInt(3, board.getBid());
+			pstmt.setInt(2, board.getBid());
 			return pstmt.executeUpdate();
 		} catch (Exception ex) {
 			ex.printStackTrace();

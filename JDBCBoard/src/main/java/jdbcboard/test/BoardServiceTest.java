@@ -10,7 +10,7 @@ public class BoardServiceTest {
 
 	public static void main(String[] args) {
 
-		BoardService boardService = new BoardServiceImpl();
+		BoardService boardService = BoardServiceImpl.getBoardServiceImpl();
 
 		// insert
 //		Board board = new Board(0, "자유게시판", 0);
@@ -23,11 +23,11 @@ public class BoardServiceTest {
 //		}
 
 		// update
-//		Board board = new Board(3, "(수정)유머게시판", 0);
-//		int result = boardService.updateBoard(board);
-//		if(result > 0) {
-//			System.out.println("수정성공");
-//		}
+		Board board = new Board(23, "삐리링11", 0);
+		int result = boardService.updateBoard(board);
+		if(result > 0) {
+			System.out.println("수정성공");
+		}
 
 		// delelte
 //		int result = boardService.deleteBoard(2);

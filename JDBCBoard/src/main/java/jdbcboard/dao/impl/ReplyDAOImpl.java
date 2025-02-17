@@ -21,13 +21,19 @@ public class ReplyDAOImpl implements ReplyDAO {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 
-	public ReplyDAOImpl() {
+	private static ReplyDAOImpl replyDAOImpl = new ReplyDAOImpl();
+	
+	private ReplyDAOImpl() {
 		try {
 			sqlProperties = new Properties();
 			sqlProperties.load(new FileReader(ApplicationConstant.SQL_PROPERTIES));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public static ReplyDAOImpl getReplyDAOImpl() {
+		return replyDAOImpl;
 	}
 
 	@Override
@@ -65,12 +71,12 @@ public class ReplyDAOImpl implements ReplyDAO {
 	}
 
 	@Override
-	public Reply getReply(int rid) {
+	public Reply getReply(int aid) {
 		try {
 			String sql = sqlProperties.getProperty("GET_REPLY");
 			conn = ConnectionUtil.getConnectionUtil().getConnection();
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, rid);
+			pstmt.setInt(1, aid);
 			rs = pstmt.executeQuery();
 			Reply reply = null;
 			if (rs != null && rs.next()) {

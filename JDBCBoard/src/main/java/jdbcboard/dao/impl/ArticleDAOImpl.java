@@ -19,8 +19,10 @@ public class ArticleDAOImpl implements ArticleDAO {
 	Properties sqlProperties = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
+	
+	private static ArticleDAOImpl articleDAOImpl = new ArticleDAOImpl();
 
-	public ArticleDAOImpl() {
+	private ArticleDAOImpl() {
 		try {
 			sqlProperties = new Properties();
 			sqlProperties.load(new FileReader(ApplicationConstant.SQL_PROPERTIES));
@@ -29,6 +31,10 @@ public class ArticleDAOImpl implements ArticleDAO {
 		}
 	}
 
+	public static ArticleDAOImpl getarticleDAOImpl() {
+		return articleDAOImpl;
+	}
+	
 	@Override
 	public List<Article> selectArticle() {
 		try {
