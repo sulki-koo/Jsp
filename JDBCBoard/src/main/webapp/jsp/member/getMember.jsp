@@ -8,16 +8,12 @@
 <meta charset="UTF-8">
 <title>회원목록</title>
 <style>
-table {
-	width: 860px;
-	margin: 0 auto;
-}
-
 table, tr, th, td {
+	width: 400px;
+	margin: 0 auto;
 	border: 1px solid #333;
 	border-collapse: collapse;
 }
-
 h3, th, td, p {
 	height: 30px;
 	line-height: 30px;
@@ -26,6 +22,7 @@ h3, th, td, p {
 </style>
 </head>
 <body>
+<%@ include file="/jsp/include/header.jsp" %>
 	<h3>회원목록</h3>
 	<table>
 		<tbody>

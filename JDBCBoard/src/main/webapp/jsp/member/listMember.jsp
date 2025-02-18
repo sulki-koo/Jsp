@@ -16,6 +16,7 @@ table, tr, th, td {
 </style>
 </head>
 <body>
+<%@ include file="/jsp/include/header.jsp" %>
 	<h3>회원목록</h3>
 	<table>
 		<thead>
@@ -48,6 +49,8 @@ table, tr, th, td {
 		</tbody>
 		</c:if>
 	</table>
-		<p><input type="button" value="등록" onclick="location.href='/insertMemberForm.do';"></p>
+		<p>
+		<input type="button" value="등록" onclick="location.href='/insertMemberForm.do';">
+		</p>
 </body>
 </html>

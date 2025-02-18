@@ -4,16 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <title>게시물등록폼</title>
-<style>input {text-align: center; background-color: lime;}</style>
+<style>h3, form {text-align: center;}</style>
 </head>
 <body>
+<%@ include file="/jsp/include/header.jsp" %>
 	<h3>게시물등록</h3>
 	<form action="/insertArticle.do" method="post">
-		제목 : <input type="text" name="asubject"><br>
-		내용 : <input type="text" name="acontent"><br>
-		게시판아이디 : <input type="text" name="bid"><br>
-		회원아이디 : <input type="text" name="mid"><br>
-	<input type="submit" value="등록"><br>
+		게시판 아이디 : <input type="text" name="bid"><br>
+		회 원 아 이 디 : <input type="text" name="mid"><br>
+		제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목 : <input type="text" name="asubject"><br>
+		<p>내 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 용<p>
+		<textarea rows="10" cols="40" name="acontent"></textarea><br>
+		<input type="file" name="acontent"><br><br>
+	<input type="submit" value="등록">
+	<input type="button" value="취소" onclick="location.href='/selectArticle.do';">
 	</form>
 </body>
 </html>

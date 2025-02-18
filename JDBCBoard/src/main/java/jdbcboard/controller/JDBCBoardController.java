@@ -1,20 +1,21 @@
 package jdbcboard.controller;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jdbcboard.model.Article;
 import jdbcboard.model.Board;
 import jdbcboard.model.Member;
 import jdbcboard.model.Reply;
-import jdbcboard.service.ArticleService;
-import jdbcboard.service.BoardService;
-import jdbcboard.service.MemberService;
 import jdbcboard.service.impl.ArticleServiceImpl;
 import jdbcboard.service.impl.BoardServiceImpl;
 import jdbcboard.service.impl.MemberServiecImpl;
@@ -46,37 +47,48 @@ public class JDBCBoardController extends HttpServlet {
 		Reply reply = null;
 		
 		switch (requestURI) {
+			case "index.do" :
+				forward(request, response, viewPage);
+				break;
 			case "selectMember.do" : 
 				resultObj = MemberServiecImpl.getMemberServiecImpl().selectMember();
 				request.setAttribute("memberList", resultObj);
+				forward(request, response, viewPage);
 				break;
 			case "selectBoard.do" : 
 				resultObj = BoardServiceImpl.getBoardServiceImpl().selectBoard();
 				request.setAttribute("boardList", resultObj);
+				forward(request, response, viewPage);
 				break;
 			case "selectArticle.do" : 
 				resultObj = ArticleServiceImpl.getArticleServiceImpl().selectArticle();
 				request.setAttribute("articleList", resultObj);
+				forward(request, response, viewPage);
 				break;
-//			case "selectReply.do" : 
-//				resultObj = ReplyServiceImpl.getReplyServiceImpl().selectReply();
-//				request.setAttribute("replyList", resultObj);
-//				break;
+			case "selectReply.do" : 
+				resultObj = ReplyServiceImpl.getReplyServiceImpl().selectReply();
+				Gson gson = new GsonBuilder().setPrettyPrinting().create();
+				String jsonStr = gson.toJson(resultObj);
+				response.setContentType("application/json");
+				PrintWriter pw = response.getWriter();
+				pw.write(jsonStr);
+				pw.flush();
+				break;
 				
 			case "getMember.do" : 
 				resultObj = MemberServiecImpl.getMemberServiecImpl().getMember(request.getParameter("mid"));
 				request.setAttribute("member", resultObj);
-				break;
-			case "getBoard.do" : 
-				resultObj = BoardServiceImpl.getBoardServiceImpl().getBoard(Integer.parseInt(request.getParameter("bid")));
-				request.setAttribute("board", resultObj);
+				forward(request, response, viewPage);
 				break;
 			case "getArticle.do" : 
 				resultObj = ArticleServiceImpl.getArticleServiceImpl().getArticle(Integer.parseInt(request.getParameter("aid")));
 				request.setAttribute("article", resultObj);
-				request.setAttribute("replyList", ReplyServiceImpl.getReplyServiceImpl().selectReply());
+				forward(request, response, viewPage);
 				break;
 				
+			case "insertMemberForm.do":
+	            response.sendRedirect(viewPage);
+	            break;
 			case "insertMember.do" : 
 				member = new Member(
 						request.getParameter("mid"),
@@ -88,27 +100,36 @@ public class JDBCBoardController extends HttpServlet {
 						"N");
 				MemberServiecImpl.getMemberServiecImpl().insertMember(member);
 				response.sendRedirect("/selectMember.do");
-				return;
+				break;
+				
+			case "insertBoardForm.do":
+	            response.sendRedirect(viewPage);
+	            break;
 			case "insertBoard.do" : 
 				board = new Board(	0, request.getParameter("bname"), 0);
 				BoardServiceImpl.getBoardServiceImpl().insertBoard(board);
 				response.sendRedirect("/selectBoard.do");
-				return;	
+				break;	
+				
+			case "insertArticleForm.do":
+	            response.sendRedirect(viewPage);
+	            break;
 			case "insertArticle.do" : 
 				article = new Article(0,	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0,
 						Integer.parseInt(request.getParameter("bid")), request.getParameter("mid"));
 				ArticleServiceImpl.getArticleServiceImpl().insertArticle(article);
 				response.sendRedirect("/selectArticle.do");
-				return;
+				break;
 			case "insertReply.do" : 
 				reply = new Reply(0,	request.getParameter("rcontent"), null, "N", request.getParameter("mid"), Integer.parseInt(request.getParameter("aid")));
 				ReplyServiceImpl.getReplyServiceImpl().insertReplyr(reply);
 				response.sendRedirect("/getArticle.do?aid="+Integer.parseInt(request.getParameter("aid")));
-				return;
+				break;
 				
 			case "updateMemberForm.do":
 				resultObj = MemberServiecImpl.getMemberServiecImpl().getMember(request.getParameter("mid"));
 				request.setAttribute("member", resultObj);
+				forward(request, response, viewPage);
 				break;
 			case "updateMember.do" : 
 				member = new Member(
@@ -121,52 +142,75 @@ public class JDBCBoardController extends HttpServlet {
 						"N");
 				MemberServiecImpl.getMemberServiecImpl().updateMember(member);
 				response.sendRedirect("/selectMember.do");
-				return;
+				break;
 				
 			case "updateBoardForm.do":
 				resultObj = BoardServiceImpl.getBoardServiceImpl().getBoard(Integer.parseInt(request.getParameter("bid")));
 				request.setAttribute("board", resultObj);
+				forward(request, response, viewPage);
 				break;
 			case "updateBoard.do" : 
 				board = new Board(Integer.parseInt(request.getParameter("bid")), request.getParameter("bname"), 0);
 				BoardServiceImpl.getBoardServiceImpl().updateBoard(board);
 				response.sendRedirect("/selectBoard.do");
-				return;
+				break;
 				
 			case "updateArticleForm.do":
 				resultObj = ArticleServiceImpl.getArticleServiceImpl().getArticle(Integer.parseInt(request.getParameter("aid")));
 				request.setAttribute("article", resultObj);
+				forward(request, response, viewPage);
 				break;
 			case "updateArticle.do" : 
-				article = new Article(Integer.parseInt(request.getParameter("aid")),	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0,
-						Integer.parseInt(request.getParameter("aid")), request.getParameter("aid"));
+				article = new Article(Integer.parseInt(request.getParameter("aid")),	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0, 0, null);
 				ArticleServiceImpl.getArticleServiceImpl().updateArticle(article);
 				response.sendRedirect("/selectArticle.do");
-				return;
+				break;
 				
 			case "deleteMember.do"	:
 				resultObj = MemberServiecImpl.getMemberServiecImpl().deleteMember(request.getParameter("mid"));
 				response.sendRedirect("/selectMember.do");
-				return;
+				break;
 			case "deleteBoard.do"	:
 				resultObj = BoardServiceImpl.getBoardServiceImpl().deleteBoard(Integer.parseInt(request.getParameter("bid")));
 				response.sendRedirect("/selectBoard.do");
-				return;
+				break;
 			case "deleteArticle.do"	:
 				resultObj = ArticleServiceImpl.getArticleServiceImpl().deleteArticle(Integer.parseInt(request.getParameter("aid")));
 				response.sendRedirect("/selectArticle.do");
-				return;
+				break;
 			case "deleteReply.do"	:
 				resultObj = ReplyServiceImpl.getReplyServiceImpl().deleteReply(Integer.parseInt(request.getParameter("rid")));
-				response.sendRedirect("/selectArticle.do");
-				return;
+				break;
+				
+			case "login.do" :
+				boolean loginResult = MemberServiecImpl.getMemberServiecImpl().checkLogin(request.getParameter("mid"), request.getParameter("mpass"));
+				if(loginResult) {
+					request.getSession().setAttribute("ss_mid", request.getParameter("mid"));
+					request.setAttribute("loginResult", true);
+				}else {
+					request.setAttribute("loginResult", false);
+				}
+				System.out.println(request.getAttribute("loginResult"));
+				System.out.println(request.getSession().getAttribute("ss_mid"));
+				forward(request, response, viewPage);
+				break;
+				
+			case "logout.do" :
+				HttpSession hs = request.getSession();
+				if(hs!=null) request.getSession().invalidate();
+				response.sendRedirect("/index.jsp");
+				break;
+				
 		}
 		
 		System.out.println("컨트롤러 뷰페이지: " + viewPage);
-		
-		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
-		rd.forward(request, response);
-		
+				
 	} // process
 
+	   private void forward(HttpServletRequest request, HttpServletResponse response, 
+		         String viewPage) throws ServletException, IOException {
+		      RequestDispatcher rd = request.getRequestDispatcher(viewPage);
+		      rd.forward(request, response);      
+		   }
+	
 } // class
