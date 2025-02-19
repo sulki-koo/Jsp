@@ -17,7 +17,7 @@
 		이 메 일 : <input type="text" name="memail"><br>
 		연 락 처 : <input type="text" name="mcp"><br>
 	<input type="submit" value="등록">
-	<input type="button" value="취소" onclick="location.href='/index.jsp';">
+	<input type="button" value="취소" onclick="location.href='/selectMember.do';">
 	</form>
 </body>
 </html>

@@ -11,7 +11,7 @@
 table, tr, th, td {
 	width: 400px;
 	margin: 0 auto;
-	border: 1px solid #333;
+	border: 1px solid rgb(179, 244, 247);
 	border-collapse: collapse;
 }
 h3, th, td, p {
@@ -19,6 +19,7 @@ h3, th, td, p {
 	line-height: 30px;
 	text-align: center;
 }
+tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 </style>
 </head>
 <body>

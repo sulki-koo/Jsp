@@ -7,12 +7,17 @@
 <head>
 <meta charset="UTF-8">
 <title>회원목록</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
+<script defer src="../js/board.js"></script>
 <style>
 table { width:860px; margin: 0 auto; }
 table, tr, th, td { 
-            border: 1px solid #333; border-collapse: collapse; 
+            border: 1px solid rgb(179, 244, 247);; border-collapse: collapse; 
         }
-        h3, th, td, p { height: 30px; line-height: 30px; text-align: center;}
+h3, th, td, p { height: 30px; line-height: 30px; text-align: center;}
+tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 </style>
 </head>
 <body>
@@ -41,16 +46,13 @@ table, tr, th, td {
 				<td>${member.mcp}</td>			
 				<td>${member.mdelyn}</td>			
 				<td>
-					<input type="button" value="수정" onclick="location.href='/updateMemberForm.do?mid=${member.mid}';">&nbsp;
-					<input type="button" value="삭제" onclick="location.href='/deleteMember.do?mid=${member.mid}';">
+					<input class="locationBtn" type="button" value="수정" data-mid="${member.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/updateMemberForm.do?mid=${member.mid}">&nbsp;
+					<input class="locationBtn" type="button" value="삭제" data-mid="${member.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/deleteMember.do?mid=${member.mid}">
 				</td>
 			</tr>
 			</c:forEach>
 		</tbody>
 		</c:if>
 	</table>
-		<p>
-		<input type="button" value="등록" onclick="location.href='/insertMemberForm.do';">
-		</p>
 </body>
 </html>

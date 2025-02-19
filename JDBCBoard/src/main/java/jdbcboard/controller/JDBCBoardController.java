@@ -1,6 +1,8 @@
 package jdbcboard.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import com.google.gson.Gson;
@@ -46,31 +48,52 @@ public class JDBCBoardController extends HttpServlet {
 		Article article = null;
 		Reply reply = null;
 		
+		Gson gson =  new GsonBuilder().setPrettyPrinting().create();
+		String jsonStr = null;
+		PrintWriter pw = null; 
+		
 		switch (requestURI) {
 			case "index.do" :
 				forward(request, response, viewPage);
 				break;
+				
 			case "selectMember.do" : 
 				resultObj = MemberServiecImpl.getMemberServiecImpl().selectMember();
 				request.setAttribute("memberList", resultObj);
 				forward(request, response, viewPage);
 				break;
+				
 			case "selectBoard.do" : 
 				resultObj = BoardServiceImpl.getBoardServiceImpl().selectBoard();
 				request.setAttribute("boardList", resultObj);
 				forward(request, response, viewPage);
 				break;
+			case "selectBoardJson.do" :
+				resultObj = BoardServiceImpl.getBoardServiceImpl().selectBoard();
+				
+				jsonStr = gson.toJson(resultObj);
+				response.setContentType("application/json");
+				pw = response.getWriter();
+				pw.write(jsonStr);
+				pw.flush();
+				break;
+				
 			case "selectArticle.do" : 
-				resultObj = ArticleServiceImpl.getArticleServiceImpl().selectArticle();
+				String searchBoard = request.getParameter("searchBoard");
+				String searchClass = request.getParameter("searchClass");
+				String searchVal = request.getParameter("searchVal");
+				resultObj = ArticleServiceImpl.getArticleServiceImpl().selectArticle(searchBoard, searchClass, searchVal);
 				request.setAttribute("articleList", resultObj);
+				request.setAttribute("searchBoard", searchBoard);
+				request.setAttribute("searchClass", searchClass);
+				request.setAttribute("searchVal", searchVal);
 				forward(request, response, viewPage);
 				break;
 			case "selectReply.do" : 
 				resultObj = ReplyServiceImpl.getReplyServiceImpl().selectReply();
-				Gson gson = new GsonBuilder().setPrettyPrinting().create();
-				String jsonStr = gson.toJson(resultObj);
+				jsonStr = gson.toJson(resultObj);
 				response.setContentType("application/json");
-				PrintWriter pw = response.getWriter();
+				pw = response.getWriter();
 				pw.write(jsonStr);
 				pw.flush();
 				break;
@@ -116,14 +139,15 @@ public class JDBCBoardController extends HttpServlet {
 	            break;
 			case "insertArticle.do" : 
 				article = new Article(0,	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0,
-						Integer.parseInt(request.getParameter("bid")), request.getParameter("mid"));
+						Integer.parseInt(request.getParameter("bid")), request.getParameter("mid"), null);
 				ArticleServiceImpl.getArticleServiceImpl().insertArticle(article);
 				response.sendRedirect("/selectArticle.do");
 				break;
 			case "insertReply.do" : 
-				reply = new Reply(0,	request.getParameter("rcontent"), null, "N", request.getParameter("mid"), Integer.parseInt(request.getParameter("aid")));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+				reply = gson.fromJson(reader.readLine(), Reply.class);
+				reply = new Reply(0,	reply.getRcontent(), null, "N", reply.getMid(), reply.getAid());
 				ReplyServiceImpl.getReplyServiceImpl().insertReplyr(reply);
-				response.sendRedirect("/getArticle.do?aid="+Integer.parseInt(request.getParameter("aid")));
 				break;
 				
 			case "updateMemberForm.do":
@@ -161,7 +185,7 @@ public class JDBCBoardController extends HttpServlet {
 				forward(request, response, viewPage);
 				break;
 			case "updateArticle.do" : 
-				article = new Article(Integer.parseInt(request.getParameter("aid")),	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0, 0, null);
+				article = new Article(Integer.parseInt(request.getParameter("aid")),	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0, 0, null, null);
 				ArticleServiceImpl.getArticleServiceImpl().updateArticle(article);
 				response.sendRedirect("/selectArticle.do");
 				break;
@@ -190,8 +214,6 @@ public class JDBCBoardController extends HttpServlet {
 				}else {
 					request.setAttribute("loginResult", false);
 				}
-				System.out.println(request.getAttribute("loginResult"));
-				System.out.println(request.getSession().getAttribute("ss_mid"));
 				forward(request, response, viewPage);
 				break;
 				

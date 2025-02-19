@@ -7,16 +7,16 @@
 <head>
 <meta charset="UTF-8">
 <title>게시물조회</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
-	<script defer src="../js/board.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
+<script defer src="../js/board.js"></script>
 <style>
 #article { width: 400px; margin: 0 auto;}
 #replyList, #content {width: 700px; margin: 0 auto;}
 
 table, tr, th, td {
-	border: 1px solid #333;
+	border: 1px solid rgb(179, 244, 247);
 	border-collapse: collapse;
 }
 
@@ -27,7 +27,8 @@ h3, th, td, p, form {
 }
 
 ul, li{list-style-type: none;}
-ul li:nth-child(even) { background-color: silver; }
+ul li:nth-child(even) { background-color: rgb(179, 244, 247); }
+tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 </style>
 </head>
 <body>
@@ -38,6 +39,10 @@ ul li:nth-child(even) { background-color: silver; }
 			<tr>
 				<td>게시물아이디</td>
 				<td>${article.aid}</td>
+			</tr>
+			<tr>
+				<td>게시판</td>
+				<td>${article.bname}</td>
 			</tr>
 			<tr>
 				<td>조회수</td>
@@ -58,8 +63,8 @@ ul li:nth-child(even) { background-color: silver; }
 		</tbody>
 	</table>
 	<p>
-		<input type="button" value="수정" onclick="location.href='/updateArticleForm.do?aid=${article.aid}';">&nbsp;
-		<input type="button" value="삭제" onclick="location.href='/deleteArticle.do?aid=${article.aid}';">&nbsp;
+		<input class="locationBtn"  type="button" value="수정" data-mid="${article.mid}" data-ssmid="${sessionScope.ss_mid}" data-location="/updateArticleForm.do?aid=${article.aid}">&nbsp;
+		<input class="locationBtn"  type="button" value="삭제" data-mid="${article.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/deleteArticle.do?aid=${article.aid}">&nbsp;
 		<input type="button" value="목록" onclick="location.href='/selectArticle.do';">
 	</p>
 		<table id="content">
@@ -71,18 +76,18 @@ ul li:nth-child(even) { background-color: silver; }
 			</tr>
 		</table>
 	<br><br>
-	<form action="/insertReply.do" method="post">
+	<c:if test="${!empty sessionScope.ss_mid }">
+	<p>
 		[${sessionScope.ss_mid}님 댓글등록] 내용 : <input type="text" name="rcontent"> 
-		<input type="hidden" name="mid" value="${sessionScope.ss_mid}"> 
-		<input type="hidden" name="aid" value="${article.aid}">
-		<input type="submit" value="등록">
-	</form><br>
-	<ul id="replyList" >
+		<input id="insertReplyBtn" type="button" value="등록" data-mid="${sessionScope.ss_mid}" data-aid="${article.aid}">
+	</p>
+	</c:if>
+	<ul id="replyList">
 		<li></li>
 	</ul>
 	<script>
 		$(function() {
-			board.getReplyList('${article.aid}');
+			board.getReplyList('${article.aid}', '${sessionScope.ss_mid}' );
 		});
 	</script>
 </body>

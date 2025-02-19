@@ -8,10 +8,10 @@
 </head>
 <body>
 <%@ include file="/jsp/include/header.jsp" %>
-	<h3>게시물등록</h3>
+	<h3>${sessionScope.ss_mid}님 게시물등록</h3>
 	<form action="/insertArticle.do" method="post">
+		<input type="hidden" name="mid" value="${sessionScope.ss_mid}">
 		게시판 아이디 : <input type="text" name="bid"><br>
-		회 원 아 이 디 : <input type="text" name="mid"><br>
 		제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목 : <input type="text" name="asubject"><br>
 		<p>내 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 용<p>
 		<textarea rows="10" cols="40" name="acontent"></textarea><br>

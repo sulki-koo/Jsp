@@ -20,8 +20,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<Article> selectArticle() {
-		return articleDAOImpl.selectArticle();
+	public List<Article> selectArticle(String searchBoard, String searchClass, String searchVal) {
+		return articleDAOImpl.selectArticle(searchBoard, searchClass, searchVal);
 	}
 
 	@Override

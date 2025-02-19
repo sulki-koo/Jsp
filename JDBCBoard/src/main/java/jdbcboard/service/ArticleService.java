@@ -6,7 +6,7 @@ import jdbcboard.model.Article;
 
 public interface ArticleService {
 	
-	default List<Article> selectArticle() { return null; }
+	default List<Article> selectArticle(String searchBoard, String searchClass, String searchVal) { return null; }
 	
 	default Article getArticle(int aid) { return null; }
 	
