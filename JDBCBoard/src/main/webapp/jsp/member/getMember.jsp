@@ -1,28 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
-<!DOCTYPE html>
-<html lang='ko'>
-<head>
-<meta charset="UTF-8">
-<title>회원목록</title>
-<style>
-table, tr, th, td {
-	width: 400px;
-	margin: 0 auto;
-	border: 1px solid rgb(179, 244, 247);
-	border-collapse: collapse;
-}
-h3, th, td, p {
-	height: 30px;
-	line-height: 30px;
-	text-align: center;
-}
-tr:nth-child(even) { background-color: rgb(179, 244, 247); }
-</style>
-</head>
-<body>
 <%@ include file="/jsp/include/header.jsp" %>
 	<h3>회원목록</h3>
 	<table>
@@ -54,7 +31,6 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 		</tbody>
 	</table>
 	<p>
-		<input type="button" value="목록"	onclick="location.href='/selectMember.do';">
+		<input type="button" value="목록"	onclick="location.href='/selectMember.do';" class="btn btn-outline-primary">
 	</p>
-</body>
-</html>
+<%@ include file="/jsp/include/footer.jsp" %>

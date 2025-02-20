@@ -1,23 +1,36 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<!DOCTYPE html>
-<html lang='ko'>
-<head>
-<meta charset="UTF-8">
-<title>게시물등록폼</title>
-<style>h3, form {text-align: center;}</style>
-</head>
-<body>
+
 <%@ include file="/jsp/include/header.jsp" %>
 	<h3>${sessionScope.ss_mid}님 게시물등록</h3>
 	<form action="/insertArticle.do" method="post">
 		<input type="hidden" name="mid" value="${sessionScope.ss_mid}">
-		게시판 아이디 : <input type="text" name="bid"><br>
-		제&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;목 : <input type="text" name="asubject"><br>
-		<p>내 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 용<p>
-		<textarea rows="10" cols="40" name="acontent"></textarea><br>
-		<input type="file" name="acontent"><br><br>
-	<input type="submit" value="등록">
-	<input type="button" value="취소" onclick="location.href='/selectArticle.do';">
+		<div class="row">
+			  <div class="col">
+				  <select name="searchBoard" class="form-select" aria-label="Default select example">
+					<option value="" <c:if test="${empty searchBoard}">selected</c:if>>게시판</option>
+				</select>&nbsp;
+			  </div>
+			  <input type="hidden" name="bid" id="selectedBid">
+			  <div class="col">
+			    <input type="text" name="asubject" class="form-control" placeholder="제목" aria-label="제목">
+			  </div>
+		</div>
+		<div class="form-floating">
+ 			 <textarea name="acontent" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+  			<label for="floatingTextarea2">Comments</label>
+		</div>
+	<input type="submit" value="등록" class="btn btn-outline-primary">
+	<input type="button" value="취소" onclick="location.href='/selectArticle.do';" class="btn btn-outline-primary">
 	</form>
-</body>
-</html>
+<script>
+	$(function() {
+   		board.getBoardList("${searchBoard}");
+   		
+   		$("select[name='searchBoard']").change(e =>{
+   			let selectedBid = $(this).find('option:selected').val();
+   			$('#selectedBid').val(selectedBid);
+   		});
+   		
+	});
+</script>
+<%@ include file="/jsp/include/footer.jsp" %>

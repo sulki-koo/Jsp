@@ -1,37 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
 
-<!DOCTYPE html>
-<html lang='ko'>
-<head>
-<meta charset="UTF-8">
-<title>게시물조회</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
-<script defer src="../js/board.js"></script>
-<style>
-#article { width: 400px; margin: 0 auto;}
-#replyList, #content {width: 700px; margin: 0 auto;}
-
-table, tr, th, td {
-	border: 1px solid rgb(179, 244, 247);
-	border-collapse: collapse;
-}
-
-h3, th, td, p, form {
-	height: 30px;
-	line-height: 30px;
-	text-align: center;
-}
-
-ul, li{list-style-type: none;}
-ul li:nth-child(even) { background-color: rgb(179, 244, 247); }
-tr:nth-child(even) { background-color: rgb(179, 244, 247); }
-</style>
-</head>
-<body>
 <%@ include file="/jsp/include/header.jsp" %>
 	<h3>제목 : ${article.asubject}</h3>
 	<table id="article">
@@ -63,9 +31,9 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 		</tbody>
 	</table>
 	<p>
-		<input class="locationBtn"  type="button" value="수정" data-mid="${article.mid}" data-ssmid="${sessionScope.ss_mid}" data-location="/updateArticleForm.do?aid=${article.aid}">&nbsp;
-		<input class="locationBtn"  type="button" value="삭제" data-mid="${article.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/deleteArticle.do?aid=${article.aid}">&nbsp;
-		<input type="button" value="목록" onclick="location.href='/selectArticle.do';">
+		<input id="updateBtn"  type="button" value="수정" data-mid="${article.mid}" data-ssmid="${sessionScope.ss_mid}" data-location="/updateArticleForm.do?aid=${article.aid}" class="btn btn-outline-primary">&nbsp;
+		<input id="deleteBtn"  type="button" value="삭제" data-mid="${article.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/deleteArticle.do?aid=${article.aid}" class="btn btn-outline-primary">&nbsp;
+		<input type="button" value="목록" onclick="location.href='/selectArticle.do';" class="btn btn-outline-primary">
 	</p>
 		<table id="content">
 			<tr>
@@ -79,7 +47,7 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 	<c:if test="${!empty sessionScope.ss_mid }">
 	<p>
 		[${sessionScope.ss_mid}님 댓글등록] 내용 : <input type="text" name="rcontent"> 
-		<input id="insertReplyBtn" type="button" value="등록" data-mid="${sessionScope.ss_mid}" data-aid="${article.aid}">
+		<input id="insertReplyBtn" type="button" value="등록" data-mid="${sessionScope.ss_mid}" data-aid="${article.aid}" class="btn btn-light">
 	</p>
 	</c:if>
 	<ul id="replyList">
@@ -90,5 +58,4 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 			board.getReplyList('${article.aid}', '${sessionScope.ss_mid}' );
 		});
 	</script>
-</body>
-</html>
+<%@ include file="/jsp/include/footer.jsp" %>

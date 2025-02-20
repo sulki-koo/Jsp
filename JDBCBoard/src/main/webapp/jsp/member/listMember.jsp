@@ -1,28 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<!DOCTYPE html>
-<html lang='ko'>
-<head>
-<meta charset="UTF-8">
-<title>회원목록</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.9/dayjs.min.js"></script>
-<script defer src="../js/board.js"></script>
-<style>
-table { width:860px; margin: 0 auto; }
-table, tr, th, td { 
-            border: 1px solid rgb(179, 244, 247);; border-collapse: collapse; 
-        }
-h3, th, td, p { height: 30px; line-height: 30px; text-align: center;}
-tr:nth-child(even) { background-color: rgb(179, 244, 247); }
-</style>
-</head>
-<body>
 <%@ include file="/jsp/include/header.jsp" %>
-	<h3>회원목록</h3>
 	<table>
 		<thead>
 			<tr>
@@ -32,7 +10,6 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 				<th>이메일</th>
 				<th>전화번호</th>
 				<th>삭제여부</th>
-				<th>수정/삭제</th>
 			</tr>
 		</thead>
 		<c:if test="${!empty memberList}">
@@ -44,15 +21,16 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 				<td>${member.malias}</td>			
 				<td>${member.memail}</td>			
 				<td>${member.mcp}</td>			
-				<td>${member.mdelyn}</td>			
+				<td>${member.mdelyn}</td>
+				<c:if test="${sessionScope.ss_mid==member.mid}">
 				<td>
-					<input class="locationBtn" type="button" value="수정" data-mid="${member.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/updateMemberForm.do?mid=${member.mid}">&nbsp;
-					<input class="locationBtn" type="button" value="삭제" data-mid="${member.mid}"  data-ssmid="${sessionScope.ss_mid}" data-location="/deleteMember.do?mid=${member.mid}">
+					<input type="button" value="수정"  onclick="location.href='/updateMemberForm.do?mid=${member.mid}';" class="btn btn-outline-primary">&nbsp;
+					<input type="button" value="삭제" onclick="location.href='/deleteMember.do?mid=${member.mid}';" class="btn btn-outline-primary">
 				</td>
+				</c:if>
 			</tr>
 			</c:forEach>
 		</tbody>
 		</c:if>
 	</table>
-</body>
-</html>
+<%@ include file="/jsp/include/footer.jsp" %>

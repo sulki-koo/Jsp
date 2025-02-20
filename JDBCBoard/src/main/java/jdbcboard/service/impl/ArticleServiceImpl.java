@@ -44,4 +44,9 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleDAOImpl.deleteArticle(aid);
 	}
 	
+	@Override
+	public int increaseAvcnt(int aid) {
+		return articleDAOImpl.increaseAvcnt(aid);
+	}
+	
 }

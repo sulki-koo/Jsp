@@ -60,8 +60,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 			
 			sql += " ORDER BY AID DESC ";
 			
-			System.out.println(searchBoard);
-				
 			conn = ConnectionUtil.getConnectionUtil().getConnection();
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -208,6 +206,26 @@ public class ArticleDAOImpl implements ArticleDAO {
 			}
 		}
 
+	}
+	
+	@Override
+	public int increaseAvcnt(int aid) {
+		try {
+			String sql = sqlProperties.getProperty("INCREASE_AVCNT");
+			conn = ConnectionUtil.getConnectionUtil().getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, aid);
+			return pstmt.executeUpdate();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				ConnectionUtil.getConnectionUtil().closeConnection(rs, pstmt, conn);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 }

@@ -15,5 +15,7 @@ public interface ArticleDAO {
 	default int updateArticle(Article article) { return 0; }
 	
 	default int deleteArticle(int aid) { return 0; }
+
+	default int increaseAvcnt(int aid) { return 0; }
 	
 }

@@ -6,10 +6,6 @@
 
 	<display-name>JDBCBoard</display-name>
 
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-
 	<context-param>
 		<param-name>databaseProp</param-name>
 		<param-value>/WEB-INF/props/database.properties</param-value>

@@ -40,21 +40,25 @@ const board = {
 			this.getReplyList(insertReplyBtn.dataset.aid, insertReplyBtn.dataset.mid);
 		});
 	},
-	getBoardList: function() {
+	getBoardList: function(searchBoard) {
 		axios.get('/selectBoardJson.do').then(
 			response => {
-				this.printBoardList(response.data);
+				this.printBoardList(response.data, searchBoard);
 			});
 	},
-	printBoardList : function(data){
+	printBoardList : function(data, searchBoard){
 		if(data) {
 			let selectHtml ='';
+			let selected = '';
 			for(brd of data){
-				selectHtml += `<option value='${brd.bid}'>${brd.bname}</option>`
+				if(`${brd.bid}`==searchBoard){ 
+					selected = "selected"; 
+				}else {
+					selected = ""; 
+				}
+				selectHtml += `<option value='${brd.bid}' ${selected}>${brd.bname}</option>`
 			}
-			$("select[name='searchBoard']").html(
-				"<option value=''>전체</option>" + selectHtml
-			);
+			$("select[name='searchBoard']").html("<option value=''>게시판선택</option>" + selectHtml);
 		}
 	}
 };
@@ -79,11 +83,17 @@ $('#insertReplyBtn').click(e => {
 	board.insertReply();
 });
 
-$('.locationBtn').click(e => {
+$('#updateBtn').click(e => {
 	if (e.target.dataset.mid === e.target.dataset.ssmid) {
 		location.href = e.target.dataset.location;
 	} else {
 		alert('권한이 없습니다.');
 	}
 });
-
+$('#deleteBtn').click(e => {
+	if (e.target.dataset.mid === e.target.dataset.ssmid) {
+		location.href = e.target.dataset.location;
+	} else {
+		alert('권한이 없습니다.');
+	}
+});

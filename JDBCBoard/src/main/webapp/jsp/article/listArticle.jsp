@@ -1,52 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
-<!DOCTYPE html>
-<html lang='ko'>
-<head>
-<meta charset="UTF-8">
-<title>게시물목록</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script defer src="../js/board.js"></script>
-<style>
-table {
-	width: 800px;
-	margin: 0 auto;
-}
 
-table, tr, th, td {
-	border: 1px solid rgb(179, 244, 247);
-	border-collapse: collapse;
-}
-
-h3, th, td, p {
-	height: 30px;
-	line-height: 30px;
-	text-align: center;
-}
-
-tr:nth-child(even) { background-color: rgb(179, 244, 247); }
-</style>
-</head>
-<body>
 	<%@ include file="/jsp/include/header.jsp" %>
-	<h3>게시물목록</h3>
-	<p>
-	<input id="insertBtn" type="button" value="등록" data-mid="${sessionScope.ss_mid}" data-location="/insertArticleForm.do">
-	</p>
 		<form action="/selectArticle.do" method="post">
-		<select name="searchBoard">
-			<option value="" <c:if test="${empty searchBoard}">selected</c:if>>전체</option>
+		<select name="searchBoard" class="form-select" aria-label="Default select example">
+			<option value="" <c:if test="${empty searchBoard}">selected</c:if>>게시판</option>
 		</select>&nbsp;
 		<select name="searchClass">
-			<option <c:if test="${empty searchClass}">selected</c:if>>전체</option>
+			<option <c:if test="${empty searchClass}">selected</c:if>>분류/전체</option>
 			<option value="asubject" <c:if test="${searchClass=='asubject'}">selected</c:if>>제목</option>
 			<option value="acontent" <c:if test="${searchClass=='acontent'}">selected</c:if>>내용</option>
 			<option value="mid" <c:if test="${searchClass=='mid'}">selected</c:if>>작성자아이디</option>
 		</select>&nbsp;
 		<input type="text" name="searchVal" value="${searchVal}">&nbsp;
-		<input type="submit" value="검색">
+		<input type="submit" value="검색"  class="btn btn-info">
+		<input id="insertBtn" type="button" value="등록" data-mid="${sessionScope.ss_mid}" data-location="/insertArticleForm.do"  class="btn btn-light">
 		</form>
 	<table>
 		<tr>
@@ -73,9 +40,8 @@ tr:nth-child(even) { background-color: rgb(179, 244, 247); }
 		</c:forEach>
 	</table>
 <script>
-	window.onload = function() {
-    board.getBoardList();
-	};
+	$(function() {
+   		board.getBoardList("${searchBoard}");
+	});
 </script>
-</body>
-</html>
+<%@ include file="/jsp/include/footer.jsp" %>

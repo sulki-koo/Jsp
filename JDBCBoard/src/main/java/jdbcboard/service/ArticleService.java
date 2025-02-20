@@ -16,4 +16,6 @@ public interface ArticleService {
 	
 	default int deleteArticle(int aid) { return 0; }
 	
+	default int increaseAvcnt(int aid) { return 0; }
+	
 }

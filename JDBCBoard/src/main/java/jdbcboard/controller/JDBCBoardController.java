@@ -54,7 +54,7 @@ public class JDBCBoardController extends HttpServlet {
 		
 		switch (requestURI) {
 			case "index.do" :
-				forward(request, response, viewPage);
+					response.sendRedirect("/selectArticle.do");
 				break;
 				
 			case "selectMember.do" : 
@@ -104,7 +104,10 @@ public class JDBCBoardController extends HttpServlet {
 				forward(request, response, viewPage);
 				break;
 			case "getArticle.do" : 
-				resultObj = ArticleServiceImpl.getArticleServiceImpl().getArticle(Integer.parseInt(request.getParameter("aid")));
+				int aid = Integer.parseInt(request.getParameter("aid"));
+				ArticleServiceImpl as = ArticleServiceImpl.getArticleServiceImpl();
+				as.increaseAvcnt(aid);
+				resultObj = as.getArticle(aid);
 				request.setAttribute("article", resultObj);
 				forward(request, response, viewPage);
 				break;
@@ -187,7 +190,7 @@ public class JDBCBoardController extends HttpServlet {
 			case "updateArticle.do" : 
 				article = new Article(Integer.parseInt(request.getParameter("aid")),	request.getParameter("asubject"), request.getParameter("acontent"), 0, null, "N", 0, 0, 0, null, null);
 				ArticleServiceImpl.getArticleServiceImpl().updateArticle(article);
-				response.sendRedirect("/selectArticle.do");
+				response.sendRedirect("/getArticle.do?aid=" + request.getParameter("aid"));
 				break;
 				
 			case "deleteMember.do"	:
@@ -214,13 +217,13 @@ public class JDBCBoardController extends HttpServlet {
 				}else {
 					request.setAttribute("loginResult", false);
 				}
-				forward(request, response, viewPage);
+				response.sendRedirect("/selectArticle.do");
 				break;
 				
 			case "logout.do" :
 				HttpSession hs = request.getSession();
 				if(hs!=null) request.getSession().invalidate();
-				response.sendRedirect("/index.jsp");
+				response.sendRedirect("/selectArticle.do");
 				break;
 				
 		}
