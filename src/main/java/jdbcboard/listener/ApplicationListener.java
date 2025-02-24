@@ -12,21 +12,12 @@ public class ApplicationListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
-		String databaseProp = sce.getServletContext().getInitParameter("databaseProp");
-		String sqlProp = sce.getServletContext().getInitParameter("sqlProp");
-		String commandProp = sce.getServletContext().getInitParameter("commandProp");
 		
-		Properties databaseProperties = new Properties();
-		Properties sqlProperties = new Properties();
+		String commandProp = sce.getServletContext().getInitParameter("commandProp");
 		Properties commandProperties = new Properties();
 		
 		try {
-			databaseProperties.load(new FileReader(sce.getServletContext().getRealPath(databaseProp)));
-			sqlProperties.load(new FileReader(sce.getServletContext().getRealPath(sqlProp)));
 			commandProperties.load(new FileReader(sce.getServletContext().getRealPath(commandProp)));
-			
-			sce.getServletContext().setAttribute("databaseProperties", databaseProperties);
-			sce.getServletContext().setAttribute("databaseProperties", databaseProperties);
 			sce.getServletContext().setAttribute("commandProperties", commandProperties);
 		} catch (FileNotFoundException fnfe) {
 			fnfe.printStackTrace();

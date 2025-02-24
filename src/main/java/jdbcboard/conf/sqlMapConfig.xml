@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+   <properties resource="/jdbcboard/props/db.properties" />
+   
+	 <typeAliases>
+      <typeAlias type="jdbcboard.model.Member" alias="Member" />
+      <typeAlias type="jdbcboard.model.Board" alias="Board" />
+      <typeAlias type="jdbcboard.model.Article" alias="Article" />
+      <typeAlias type="jdbcboard.model.Reply" alias="Reply" />
+      <typeAlias type="jdbcboard.model.ArticleCriteria" alias="ArticleCriteria" />
+   </typeAliases> 
+	
+   <environments default="development">
+      <environment id="development">
+         <transactionManager type="JDBC" />
+         <dataSource type="POOLED">
+            <property name="driver" value="${driver}" />
+            <property name="url" value="${url}" />
+            <property name="username" value="${username}" />
+            <property name="password" value="${password}" />
+         </dataSource>
+      </environment>
+   </environments>
+
+	<mappers>
+		<mapper resource="jdbcboard/conf/Member.xml" />
+		<mapper resource="jdbcboard/conf/Board.xml" />
+		<mapper resource="jdbcboard/conf/Article.xml" />
+		<mapper resource="jdbcboard/conf/Reply.xml" />
+	</mappers>
+</configuration>

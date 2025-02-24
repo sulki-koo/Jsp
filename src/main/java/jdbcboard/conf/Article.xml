@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Article">
+  
+  <sql id="selectArticle">
+	  SELECT A.AID AS AID, 
+	           A.ASUBJECT ASUBJECT, 
+	           A.ACONTENT ACONTENT, 
+	           A.AVCNT AVCNT, 
+	           A.AREGDATE AREGDATE, 
+	           A.MID MID, 
+	           A.ARCNT ARCNT, 
+	           A.AAFCNT AAFCNT, 
+	           A.ADELYN ADELYN, 
+	           B.BID BID, 
+	           B.BNAME BNAME
+	    FROM
+	    	ARTICLE A, BOARD B
+	    WHERE
+	    	A.BID = B.BID
+	      	AND
+	      	A.ADELYN = 'N'
+  </sql>
+
+ <select id="selectArticle" parameterType="ArticleCriteria" resultType="Article">
+    <include refid="selectArticle"/>
+	    <if test="searchBoard != null and searchBoard != ''">
+	    		AND B.BID = #{searchBoard}
+	    	</if>
+	    	<if test="searchClass != null">
+	    		<choose>
+	    			<when test="searchClass == 'asubject'">
+	    				AND A.ASUBJECT LIKE '%'||#{searchVal}||'%'
+	    			</when>
+	    			<when test="searchClass == 'acontent'">
+	    				AND A.ACONTENT LIKE '%'||#{searchVal}||'%'
+	    			</when>
+	    			<when test="searchClass == 'mid'">
+	    				AND A.MID LIKE '%'||#{searchVal}||'%'
+	    			</when>
+	    			<otherwise>
+	    				AND (A.ASUBJECT LIKE '%'||#{searchVal}||'%'
+							 OR A.ACONTENT LIKE '%'||#{searchVal}||'%'
+							 OR A.MID LIKE '%'||#{searchVal}||'%')
+	    			</otherwise>
+	    		</choose>
+	    	</if>
+    ORDER BY AID DESC
+  </select>
+
+  <select id="getArticle" parameterType="int" resultType="Article">
+    <include refid="selectArticle"/>
+     AND A.AID = #{aid}
+  </select>
+
+  <insert id="insertArticle" parameterType="Article">
+    INSERT INTO ARTICLE (AID, ASUBJECT, ACONTENT, AVCNT, AREGDATE, ADELYN, AAFCNT, ARCNT, BID, MID)
+    VALUES (ARTICLE_SEQ.NEXTVAL, #{asubject}, #{acontent}, 0, SYSDATE, 'N', 0, 0, #{bid}, #{mid})
+  </insert>
+
+  <update id="updateArticle" parameterType="Article">
+    UPDATE ARTICLE
+    SET ASUBJECT = #{asubject}, 
+        ACONTENT = #{acontent}
+    WHERE AID = #{aid}
+  </update>
+
+  <update id="deleteArticle" parameterType="int">
+    UPDATE ARTICLE
+    SET ADELYN = 'Y'
+    WHERE AID = #{aid}
+  </update>
+
+  <update id="increaseAvcnt" parameterType="int">
+    UPDATE ARTICLE
+    SET AVCNT = AVCNT + 1
+    WHERE AID = #{aid}
+  </update>
+
+</mapper>

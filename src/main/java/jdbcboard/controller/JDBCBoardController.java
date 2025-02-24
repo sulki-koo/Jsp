@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jdbcboard.model.Article;
+import jdbcboard.model.ArticleCriteria;
 import jdbcboard.model.Board;
 import jdbcboard.model.Member;
 import jdbcboard.model.Reply;
@@ -82,7 +83,7 @@ public class JDBCBoardController extends HttpServlet {
 				String searchBoard = request.getParameter("searchBoard");
 				String searchClass = request.getParameter("searchClass");
 				String searchVal = request.getParameter("searchVal");
-				resultObj = ArticleServiceImpl.getArticleServiceImpl().selectArticle(searchBoard, searchClass, searchVal);
+				resultObj = ArticleServiceImpl.getArticleServiceImpl().selectArticle(new ArticleCriteria(searchBoard, searchClass, searchVal));
 				request.setAttribute("articleList", resultObj);
 				request.setAttribute("searchBoard", searchBoard);
 				request.setAttribute("searchClass", searchClass);

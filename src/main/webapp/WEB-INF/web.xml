@@ -7,14 +7,6 @@
 	<display-name>JDBCBoard</display-name>
 
 	<context-param>
-		<param-name>databaseProp</param-name>
-		<param-value>/WEB-INF/props/database.properties</param-value>
-	</context-param>
-	<context-param>
-		<param-name>sqlProp</param-name>
-		<param-value>/WEB-INF/props/sql.properties</param-value>
-	</context-param>
-	<context-param>
 		<param-name>commandProp</param-name>
 		<param-value>/WEB-INF/props/command.properties</param-value>
 	</context-param>

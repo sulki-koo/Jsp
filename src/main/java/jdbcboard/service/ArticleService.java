@@ -3,10 +3,11 @@ package jdbcboard.service;
 import java.util.List;
 
 import jdbcboard.model.Article;
+import jdbcboard.model.ArticleCriteria;
 
 public interface ArticleService {
 	
-	default List<Article> selectArticle(String searchBoard, String searchClass, String searchVal) { return null; }
+	default List<Article> selectArticle(ArticleCriteria articleCriteria) { return null; }
 	
 	default Article getArticle(int aid) { return null; }
 	

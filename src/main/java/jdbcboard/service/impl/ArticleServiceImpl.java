@@ -4,6 +4,7 @@ import java.util.List;
 
 import jdbcboard.dao.impl.ArticleDAOImpl;
 import jdbcboard.model.Article;
+import jdbcboard.model.ArticleCriteria;
 import jdbcboard.service.ArticleService;
 
 public class ArticleServiceImpl implements ArticleService {
@@ -20,8 +21,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public List<Article> selectArticle(String searchBoard, String searchClass, String searchVal) {
-		return articleDAOImpl.selectArticle(searchBoard, searchClass, searchVal);
+	public List<Article> selectArticle(ArticleCriteria articleCriteria) {
+		return articleDAOImpl.selectArticle(articleCriteria);
 	}
 
 	@Override

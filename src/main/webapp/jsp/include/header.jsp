@@ -5,7 +5,7 @@
 <html lang='ko'>
 <head>
 <meta charset="UTF-8">
-<title>JDBC게시판</title>
+<title>MyBatis게시판</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@4.0.1/reset.min.css"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="${pageContenxt.request.contextPath}/css/board.css" rel="stylesheet">
@@ -18,7 +18,7 @@
 <body>
 <div id="wrapper">
 <header>
-	<h1>JDBC게시판</h1>
+	<h1>MyBatis게시판</h1>
 	<%@ include file="/jsp/include/nav.jsp" %>
 	<c:if test="${empty sessionScope.ss_mid}">
 		<form id="loginArea" name="loginForm" action="/login.do" method="post">
