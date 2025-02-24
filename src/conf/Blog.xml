@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="blog">
+
+	<resultMap id="blogResultMap" type="Blog">
+			<id property="blogId" column="blog_id"/>
+			<result property="blogName" column="blog_name"/>	
+			<result property="blogTitle" column="blog_title"/>
+			<association property="author" column="blog_author_id"  javaType="Author" resultMap="authorResultMap"/>
+			<collection property="comms" ofType="Comm" resultMap="commResultMap"/>
+	</resultMap>
+	
+	<resultMap id="authorResultMap" type="Author">
+		<id property="authorId" column="author_id"/>
+		<result property="authorName" column="author_name"/>
+		<result property="blogId" column="blog_id"/>
+	</resultMap>
+	
+	<resultMap id="commResultMap" type="Comm">
+		<id property="commId" column="comm_id"/>
+		<result property="commTitle" column="comm_Title"/>
+		<result property="commContent" column="comm_Content"/>
+		<result property="blogId" column="blog_id"/>
+	</resultMap>
+	
+	<select id="selectBlog" resultMap="blogResultMap">
+		SELECT
+	        B.BLOG_ID, B.BLOG_NAME, B.BLOG_TITLE, B.BLOG_AUTHOR_ID,
+	        A.AUTHOR_ID, A.AUTHOR_NAME, A.BLOG_ID,
+	        C.COMM_ID, C.COMM_TITLE, C.COMM_CONTENT, C.BLOG_ID
+    	FROM
+	        BLOG B
+	        LEFT OUTER JOIN AUTHOR A ON B.BLOG_ID=A.BLOG_ID
+	        LEFT OUTER JOIN COMM C ON C.BLOG_ID=A.BLOG_ID
+    	ORDER BY B.BLOG_ID DESC
+	</select>
+	
+	<sql id="selectCommLet">
+		SELECT COMM_ID, COMM_TITLE, COMM_CONTENT, BLOG_ID FROM COMM
+	</sql>
+	
+	<select id="selectCommsByBlogId" parameterType="CommSearcher" resultMap="commResultMap">
+		<include refid="selectCommLet" />
+		WHERE BLOG_ID=#{blogId}
+		<if test="searchValue!=null">
+			<if test="searchKey=='title'">
+				 AND COMM_TITLE LIKE '%'||#{searchValue}||'%'
+			</if>
+			<if test="searchKey=='content'">
+				 AND COMM_CONTENT LIKE '%'||#{searchValue}||'%'
+			</if>
+		</if>
+		<!-- 
+		<choose>
+			<when test="searchKey=='title'">
+				AND COMM_TITLE LIKE '%'||#{searchValue}||'%'
+			</when>
+			<when test="searchKey=='content'">
+				AND COMM_CONTENT LIKE '%'||#{searchValue}||'%'
+			</when>
+		</choose>
+		 -->
+		 ORDER BY COMM_ID DESC
+	</select>
+	
+	<select id="selectCommsByCommIds" parameterType="list" resultMap="commResultMap">
+		<include refid="selectCommLet" />
+		<where>
+			BLOG_ID=#{list[0]}
+			AND COMM_ID IN
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				<if test="index>0">#{item}</if>
+			</foreach>	
+		</where>
+	</select>
+	
+	<update id="updateComm" parameterType="Comm">
+		UPDATE  COMM
+		<trim prefix="set" suffixOverrides=",">
+			<if test="commTitle!=null">COMM_TITLE=#{commTitle},</if>
+			<if test="commContent!=null">COMM_CONTENT=#{commContent}</if>
+		</trim>
+		<where>
+			<if test="commId!=null">COMM_ID=#{commId}</if>
+			<if test="blogId!=null">AND BLOG_ID=#{blogId}</if>
+		</where>
+	</update>
+	
+</mapper>
