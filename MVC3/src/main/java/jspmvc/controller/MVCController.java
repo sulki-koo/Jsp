@@ -8,7 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jspmvc.dao.impl.MVCUpdateDAO;
 import jspmvc.model.MVCDTO;
 import jspmvc.service.MVCService;
 import jspmvc.service.impl.MVCDeleteService;
@@ -76,15 +75,16 @@ public class MVCController extends HttpServlet {
 			} else if (command.equals("update.do")) {
 				MVCService service = new MVCUpdateService();
 				MVCDTO dto = new MVCDTO();
-				
+				dto.setSid(Integer.parseInt(request.getParameter("sid")));
 				dto.setTitle(request.getParameter("title"));
 				dto.setContent(request.getParameter("content"));
-				int result = service.update(Integer.parseInt(request.getParameter("sid")), dto);
+				int result = service.update(dto);
 				
 				if (result > 0) {
 					response.sendRedirect("/select.do");
 				}else {
 					System.out.println("업뎃 실패");
+					response.sendRedirect("/select.do");
 				}
 			}
 		}

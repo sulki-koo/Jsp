@@ -14,6 +14,6 @@ public interface MVCService {
 	
 	public abstract void  delete(int sid);
 	
-	public abstract int update(int sid,  MVCDTO dto);
+	public abstract int update(MVCDTO dto);
 	
 }

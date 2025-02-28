@@ -9,9 +9,8 @@ import jspmvc.util.ConnectionUtil;
 
 public class MVCUpdateDAO extends MVCAbstractDAO {
 
-	public int update(int sid, MVCDTO dto) {
-		System.out.println(sid);
-		System.out.println(dto);
+	public int update(MVCDTO dto) {
+		
 		String sql = " update jspmvc set title=?, content=? where sid=? ";
 
 		ConnectionUtil connUtil = new ConnectionUtil();
@@ -24,7 +23,7 @@ public class MVCUpdateDAO extends MVCAbstractDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
-			pstmt.setInt(3, sid);
+			pstmt.setInt(3, dto.getSid());
 
 			return pstmt.executeUpdate();
 		} catch (Exception ex) {

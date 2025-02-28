@@ -7,8 +7,8 @@ import jspmvc.service.MVCAbstractService;
 public class MVCUpdateService extends MVCAbstractService {
 
 	@Override
-	public int update(int sid, MVCDTO dto) {
-		return new MVCUpdateDAO().update(sid, dto);
+	public int update(MVCDTO dto) {
+		return new MVCUpdateDAO().update(dto);
 	}
 
 }

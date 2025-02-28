@@ -26,7 +26,7 @@ public abstract class MVCAbstractDAO implements MVCDAO {
 	}
 	
 	@Override
-	public int update(int sid, MVCDTO dto) {
+	public int update(MVCDTO dto) {
 		return 0;
 	}
 	
