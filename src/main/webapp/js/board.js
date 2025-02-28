@@ -50,15 +50,21 @@ const board = {
 		if(data) {
 			let selectHtml ='';
 			let selected = '';
-			for(brd of data){
-				if(`${brd.bid}`==searchBoard){ 
-					selected = "selected"; 
-				}else {
-					selected = ""; 
-				}
-				selectHtml += `<option value='${brd.bid}' ${selected}>${brd.bname}</option>`
-			}
-			$("select[name='searchBoard']").html("<option value=''>게시판선택</option>" + selectHtml);
+			
+			// 가장 첫 번째 게시판을 selected 상태로 설정
+			        if (data.length > 0) {
+			            // 첫 번째 게시판을 selected로 설정
+			            selected = "selected"; 
+			            selectHtml += `<option value='${data[0].bid}' ${selected}>${data[0].bname}</option>`;
+			        }
+
+			        // 나머지 게시판들을 추가
+			        for (let i = 1; i < data.length; i++) {
+			            selected = (data[i].bid == searchBoard) ? "selected" : ""; // 기존 선택된 게시판 상태 유지
+			            selectHtml += `<option value='${data[i].bid}' ${selected}>${data[i].bname}</option>`;
+			        }
+					
+			$("select[name='searchBoard']").append(selectHtml);
 		}
 	}
 };

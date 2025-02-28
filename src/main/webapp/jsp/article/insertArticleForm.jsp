@@ -6,11 +6,9 @@
 		<input type="hidden" name="mid" value="${sessionScope.ss_mid}">
 		<div class="row">
 			  <div class="col">
-				  <select name="searchBoard" class="form-select" aria-label="Default select example">
-					<option value="" <c:if test="${empty searchBoard}">selected</c:if>>게시판</option>
-				</select>&nbsp;
+				  <select name="searchBoard" class="form-select" aria-label="Default select example"></select>&nbsp;
 			  </div>
-			  <input type="hidden" name="bid" id="selectedBid">
+			  <input type="hidden" name="bid" id="selectedBid" value="1">
 			  <div class="col">
 			    <input type="text" name="asubject" class="form-control" placeholder="제목" aria-label="제목">
 			  </div>
@@ -30,7 +28,6 @@
    			let selectedBid = $(this).find('option:selected').val();
    			$('#selectedBid').val(selectedBid);
    		});
-   		
 	});
 </script>
 <%@ include file="/jsp/include/footer.jsp" %>
